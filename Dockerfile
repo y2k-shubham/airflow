@@ -30,7 +30,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
 ARG PYTHON_BASE_IMAGE="python:3.6-slim-stretch"
 ENV PYTHON_BASE_IMAGE=${PYTHON_BASE_IMAGE}
 
-ARG AIRFLOW_VERSION="2.0.0.dev0"
+ARG AIRFLOW_VERSION="1.10.5"
 ENV AIRFLOW_VERSION=$AIRFLOW_VERSION
 
 # Print versions
@@ -58,7 +58,8 @@ RUN apt-get update \
 
 # Install basic apt dependencies
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && apt-get update \
+    && apt-get update -yqq\
+    && apt-get upgrade -yqq \
     && apt-get install -y --no-install-recommends \
            apt-utils \
            build-essential \
@@ -81,9 +82,16 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
            rsync \
            sasl2-bin \
            sudo \
+           tree \
+           vim \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+        /tmp/* \
+        /var/tmp/* \
+        /usr/share/man \
+        /usr/share/doc \
+        /usr/share/doc-base
 
 # Install MySQL client from Oracle repositories (Debian installs mariadb)
 RUN KEY="A4A9406876FCBD3C456770C88C718D3B5072E1F5" \
@@ -266,7 +274,7 @@ ENV PIP_NO_CACHE_DIR=${PIP_NO_CACHE_DIR}
 RUN echo "Pip no cache dir: ${PIP_NO_CACHE_DIR}"
 
 # PIP version used to install dependencies
-ARG PIP_VERSION="19.0.1"
+ARG PIP_VERSION="19.3.1"
 ENV PIP_VERSION=${PIP_VERSION}
 RUN echo "Pip version: ${PIP_VERSION}"
 
