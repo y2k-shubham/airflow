@@ -2,8 +2,7 @@ pipeline {
     agent { label "production" }
 
     environment {
-        // We will use Jenkins parameterized build to hide ecr endpoint
-        ecrImageUri = $ECRIMAGEURI
+        ecrImageUri = "125719378300.dkr.ecr.ap-southeast-1.amazonaws.com"
         ecrRepo = "zdp-airflow"
     }
 
@@ -39,8 +38,6 @@ pipeline {
                 script {
                     withAWS(profile:"JUMBO-ACCOUNT") {
                         script {
-                            def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
-                            sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
                             sh "docker system prune -f"
                         }
                     }

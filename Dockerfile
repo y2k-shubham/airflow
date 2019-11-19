@@ -398,11 +398,21 @@ RUN \
 
 USER ${AIRFLOW_USER}
 
-WORKDIR ${AIRFLOW_SOURCES}
+WORKDIR ${AIRFLOW_HOME}
 
 ENV PATH="${HOME}:${PATH}"
 
 EXPOSE 8080
+
+ARG WEBSERVER_CONFIG="default_webserver_config.py"
+ENV WEBSERVER_CONFIG=${WEBSERVER_CONFIG}
+
+COPY --chown=airflow:airflow "./airflow/config_templates/${WEBSERVER_CONFIG}" ${AIRFLOW_HOME}/webserver_config.py
+
+ARG AIRFLOW_CFG="default_airflow.cfg"
+ENV AIRFLOW_CFG=${AIRFLOW_CFG}
+
+COPY --chown=airflow:airflow "./airflow/config_templates/${AIRFLOW_CFG}" ${AIRFLOW_HOME}/airflow.cfg
 
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--", "/entrypoint.sh"]
 
