@@ -33,5 +33,19 @@ pipeline {
                 }
             }
         }
+
+        stage("Clean") {
+            steps {
+                script {
+                    withAWS(profile:"JUMBO-ACCOUNT") {
+                        script {
+                            def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
+                            sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
+                            sh "docker system prune -f"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
