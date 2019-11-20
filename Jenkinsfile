@@ -19,8 +19,8 @@ pipeline {
                             webserver_config = 'webserver_config-dev.py'
                             airflow_cfg = 'airflow-dev.cfg'
                         }
-                        sh "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG ${webserver_config} \
-                        --build-arg AIRFLOW_CFG ${airflow_cfg} ."
+                        sh "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG=${webserver_config} \
+                        --build-arg AIRFLOW_CFG=${airflow_cfg} ."
                     }
                 }
             }
