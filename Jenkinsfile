@@ -7,24 +7,17 @@ pipeline {
                 withAWS(profile:"JUMBO-ACCOUNT") {
                     script {
                         def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
+                        def webserver_config
+                        def airflow_cfg
                         if (branch == "zmaster") {
-                            echo "branch is ${branch}"
-                            def webserver_config = 'webserver_config-prod.py'
-                            def airflow_cfg = 'airflow-prod.cfg'
-                            echo "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG ${webserver_config} \
-                        --build-arg AIRFLOW_CFG ${airflow_cfg} ."
+                            webserver_config = 'webserver_config-prod.py'
+                            airflow_cfg = 'airflow-prod.cfg'
                         } else if (branch == "zstaging") {
-                            echo "branch is ${branch}"
-                            def webserver_config = 'webserver_config-staging.py'
-                            def airflow_cfg = 'airflow-staging.cfg'
-                            echo "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG ${webserver_config} \
-                        --build-arg AIRFLOW_CFG ${airflow_cfg} ."
+                            webserver_config = 'webserver_config-staging.py'
+                            airflow_cfg = 'airflow-staging.cfg'
                         } else {
-                            echo "branch is ${branch}"
-                            def webserver_config = 'webserver_config-dev.py'
-                            def airflow_cfg = 'airflow-dev.cfg'
-                            echo "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG ${webserver_config} \
-                        --build-arg AIRFLOW_CFG ${airflow_cfg} ."
+                            webserver_config = 'webserver_config-dev.py'
+                            airflow_cfg = 'airflow-dev.cfg'
                         }
                         sh "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG ${webserver_config} \
                         --build-arg AIRFLOW_CFG ${airflow_cfg} ."
