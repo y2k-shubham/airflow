@@ -17,8 +17,8 @@ pipeline {
                             def webserver_config = "webserver_config-dev.py"
                             def airflow_cfg = "airflow-dev.cfg"
                         }
-                        sh "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG ${webserver_config} \
-                        --build-arg AIRFLOW_CFG ${airflow_cfg} ."
+                        sh "docker build -t zdp-airflow:$branch --build-arg WEBSERVER_CONFIG $webserver_config \
+                        --build-arg AIRFLOW_CFG $airflow_cfg ."
                     }
                 }
             }
@@ -31,8 +31,8 @@ pipeline {
                         script {
                             def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
                             sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
-                            sh "docker tag zdp-airflow:${branch} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
-                            sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
+                            sh "docker tag zdp-airflow:$branch 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:$branch"
+                            sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:$branch"
                         }
                     }
                 }
