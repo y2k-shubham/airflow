@@ -589,6 +589,16 @@ if not os.path.isfile(AIRFLOW_CONFIG):
         if six.PY2:
             cfg = cfg.encode('utf8')
         f.write(cfg)
+else:
+    log.info(
+        'Generating configuration from the provided template + variables defined in: %s',
+        AIRFLOW_CONFIG
+    )
+    with open(AIRFLOW_CONFIG, 'w') as f:
+        cfg = parameterized_config(AIRFLOW_CONFIG)
+        if six.PY2:
+            cfg = cfg.encode('utf8')
+        f.write(cfg)
 
 log.info("Reading the config from %s", AIRFLOW_CONFIG)
 
