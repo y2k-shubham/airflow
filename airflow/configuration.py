@@ -595,7 +595,8 @@ else:
         AIRFLOW_CONFIG
     )
     with open(AIRFLOW_CONFIG, 'w') as f:
-        cfg = parameterized_config(AIRFLOW_CONFIG)
+        cfg = parameterized_config(open(AIRFLOW_CONFIG).read().decode('utf-8') if six.PY2 else open(AIRFLOW_CONFIG, encoding='utf-8').read())
+        cfg = cfg.split(TEMPLATE_START)[-1].strip()
         if six.PY2:
             cfg = cfg.encode('utf8')
         f.write(cfg)
