@@ -78,10 +78,13 @@ RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
            libssl-dev \
            locales  \
            netcat \
+           net-tools \
            nodejs \
+           procps \
            rsync \
            sasl2-bin \
            sudo \
+           telnet \
            tree \
            vim \
     && apt-get autoremove -yqq --purge \
@@ -402,7 +405,7 @@ WORKDIR ${AIRFLOW_HOME}
 
 ENV PATH="${HOME}:${PATH}"
 
-EXPOSE 8080
+EXPOSE 8080 5555 8793
 
 ARG WEBSERVER_CONFIG="default_webserver_config.py"
 ENV WEBSERVER_CONFIG=${WEBSERVER_CONFIG}
