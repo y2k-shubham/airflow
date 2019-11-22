@@ -596,7 +596,6 @@ with open(AIRFLOW_CONFIG, 'r+') as f:
         cfg = cfg.split(TEMPLATE_START)[-1].strip()
         if six.PY2:
             cfg = cfg.encode('utf8')
-        print(cfg)
         f.write(cfg)
 
 log.info("Reading the config from %s", AIRFLOW_CONFIG)
