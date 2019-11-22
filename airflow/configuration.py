@@ -98,7 +98,9 @@ def run_command(command):
     return output
 
 
-def _read_config_from_path(file_path):
+def _read_default_config_file(file_name):
+    templates_dir = os.path.join(os.path.dirname(__file__), 'config_templates')
+    file_path = os.path.join(templates_dir, file_name)
     if six.PY2:
         with open(file_path) as f:
             config = f.read()
@@ -106,12 +108,6 @@ def _read_config_from_path(file_path):
     else:
         with open(file_path, encoding='utf-8') as f:
             return f.read()
-
-
-def _read_default_config_file(file_name):
-    templates_dir = os.path.join(os.path.dirname(__file__), 'config_templates')
-    file_path = os.path.join(templates_dir, file_name)
-    return _read_config_from_path(file_path)
 
 
 DEFAULT_CONFIG = _read_default_config_file('default_airflow.cfg')
@@ -587,12 +583,21 @@ log.info(
     'Generating configuration from the provided template + variables defined in: %s',
     AIRFLOW_CONFIG
 )
-with open(AIRFLOW_CONFIG, 'w') as f:
-    cfg = parameterized_config(_read_config_from_path(AIRFLOW_CONFIG))
-    cfg = cfg.split(TEMPLATE_START)[-1].strip()
+with open(AIRFLOW_CONFIG, 'r+') as f:
     if six.PY2:
-        cfg = cfg.encode('utf8')
-    f.write(cfg)
+        content = f.read().decode('utf-8')
+    else:
+        content = f.read()
+
+    if len(content.split(TEMPLATE_START)) == 2:
+        f.seek(0)
+        f.truncate()
+        cfg = parameterized_config(content)
+        cfg = cfg.split(TEMPLATE_START)[-1].strip()
+        if six.PY2:
+            cfg = cfg.encode('utf8')
+        print(cfg)
+        f.write(cfg)
 
 log.info("Reading the config from %s", AIRFLOW_CONFIG)
 
