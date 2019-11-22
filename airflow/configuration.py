@@ -98,9 +98,7 @@ def run_command(command):
     return output
 
 
-def _read_default_config_file(file_name):
-    templates_dir = os.path.join(os.path.dirname(__file__), 'config_templates')
-    file_path = os.path.join(templates_dir, file_name)
+def _read_config_from_path(file_path):
     if six.PY2:
         with open(file_path) as f:
             config = f.read()
@@ -108,6 +106,12 @@ def _read_default_config_file(file_name):
     else:
         with open(file_path, encoding='utf-8') as f:
             return f.read()
+
+
+def _read_default_config_file(file_name):
+    templates_dir = os.path.join(os.path.dirname(__file__), 'config_templates')
+    file_path = os.path.join(templates_dir, file_name)
+    return _read_config_from_path(file_path)
 
 
 DEFAULT_CONFIG = _read_default_config_file('default_airflow.cfg')
@@ -578,28 +582,17 @@ if not os.path.isfile(TEST_CONFIG_FILE):
     with open(TEST_CONFIG_FILE, 'w') as f:
         cfg = parameterized_config(TEST_CONFIG)
         f.write(cfg.split(TEMPLATE_START)[-1].strip())
-if not os.path.isfile(AIRFLOW_CONFIG):
-    log.info(
-        'Creating new Airflow config file in: %s',
-        AIRFLOW_CONFIG
-    )
-    with open(AIRFLOW_CONFIG, 'w') as f:
-        cfg = parameterized_config(DEFAULT_CONFIG)
-        cfg = cfg.split(TEMPLATE_START)[-1].strip()
-        if six.PY2:
-            cfg = cfg.encode('utf8')
-        f.write(cfg)
-else:
-    log.info(
-        'Generating configuration from the provided template + variables defined in: %s',
-        AIRFLOW_CONFIG
-    )
-    with open(AIRFLOW_CONFIG, 'w') as f:
-        cfg = parameterized_config(open(AIRFLOW_CONFIG).read().decode('utf-8') if six.PY2 else open(AIRFLOW_CONFIG, encoding='utf-8').read())
-        cfg = cfg.split(TEMPLATE_START)[-1].strip()
-        if six.PY2:
-            cfg = cfg.encode('utf8')
-        f.write(cfg)
+
+log.info(
+    'Generating configuration from the provided template + variables defined in: %s',
+    AIRFLOW_CONFIG
+)
+with open(AIRFLOW_CONFIG, 'w') as f:
+    cfg = parameterized_config(_read_config_from_path(AIRFLOW_CONFIG))
+    cfg = cfg.split(TEMPLATE_START)[-1].strip()
+    if six.PY2:
+        cfg = cfg.encode('utf8')
+    f.write(cfg)
 
 log.info("Reading the config from %s", AIRFLOW_CONFIG)
 
