@@ -18,7 +18,6 @@
 # under the License.
 """Setup for the Airflow library."""
 
-
 from setuptools import setup, find_packages, Command
 
 import imp
@@ -256,9 +255,15 @@ virtualenv = ['virtualenv']
 webhdfs = ['hdfs[dataframe,avro,kerberos]>=2.0.4']
 winrm = ['pywinrm==0.2.2']
 zendesk = ['zdesk']
+zomato_custom = ['statsmodels~=0.9.0',
+                 'prometheus_client~=0.7.1',
+                 'humanfriendly~=4.18',
+                 'pylivy~=0.0.3',
+                 'yarn-api-client~=0.3.6',
+                 'sasl~=0.2.1']
 
 all_dbs = postgres + mysql + hive + mssql + hdfs + vertica + cloudant + druid + pinot \
-    + cassandra + mongo
+          + cassandra + mongo
 
 devel = [
     'beautifulsoup4~=4.7.1',
@@ -299,7 +304,8 @@ devel_all = (sendgrid + devel + all_dbs + doc + samba + s3 + slack + crypto + or
              docker + ssh + kubernetes + celery + azure_blob_storage + redis + gcp + grpc +
              datadog + zendesk + jdbc + ldap + kerberos + password + webhdfs + jenkins +
              druid + pinot + segment + snowflake + elasticsearch + azure_data_lake + azure_cosmos +
-             atlas + azure_container_instances + cgroups + virtualenv + flask_oauth + atlas + emr)
+             atlas + azure_container_instances + cgroups + virtualenv + flask_oauth + atlas + emr +
+             async_packages) + zomato_custom
 
 # Snakebite & Google Cloud Dataflow are not Python 3 compatible :'(
 if PY3:
