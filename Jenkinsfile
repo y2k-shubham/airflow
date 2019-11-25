@@ -20,23 +20,40 @@ pipeline {
                             webserver_config = 'webserver_config-dev.py'
                             airflow_cfg = 'airflow-dev.cfg'
                         }
-                        sh "docker build -t zdp-airflow:${tag} --build-arg WEBSERVER_CONFIG=${webserver_config} \
-                        --build-arg AIRFLOW_CFG=${airflow_cfg} ."
+//                         sh "docker build -t zdp-airflow:${tag} --build-arg WEBSERVER_CONFIG=${webserver_config} \
+//                         --build-arg AIRFLOW_CFG=${airflow_cfg} ."
                     }
                 }
             }
         }
 
-        stage("Deploy") {
+        stage("Deploy current tag") {
             steps {
                 script {
                     withAWS(profile:"JUMBO-ACCOUNT") {
                         script {
                             def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
                             def tag = "${branch}_${env.BUILD_ID}"
-                            sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
-                            sh "docker tag zdp-airflow:${tag} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
-                            sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
+                            echo $GIT_COMMIT
+//                             sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
+//                             sh "docker tag zdp-airflow:${tag} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
+//                             sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage("Deploy release") {
+            steps {
+                script {
+                    withAWS(profile:"JUMBO-ACCOUNT") {
+                        script {
+                            def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
+                            def tag = "${branch}_${env.BUILD_ID}"
+//                             sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
+//                             sh "docker tag zdp-airflow:${tag} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
+//                             sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
                         }
                     }
                 }
@@ -48,7 +65,7 @@ pipeline {
                 script {
                     withAWS(profile:"JUMBO-ACCOUNT") {
                         script {
-                            sh "docker system prune -f"
+//                             sh "docker system prune -f"
                         }
                     }
                 }
