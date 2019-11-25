@@ -33,8 +33,8 @@ pipeline {
                     withAWS(profile:"JUMBO-ACCOUNT") {
                         script {
                             def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
-                            def tag = "${branch}_${env.BUILD_ID}"
-                            echo $GIT_COMMIT
+                            def tag = "${branch}_${GIT_COMMIT}"
+                            sh "echo ${tag}"
 //                             sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
 //                             sh "docker tag zdp-airflow:${tag} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
 //                             sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
@@ -51,6 +51,7 @@ pipeline {
                         script {
                             def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
                             def tag = "${branch}_${env.BUILD_ID}"
+                            sh "echo ${tag}"
 //                             sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
 //                             sh "docker tag zdp-airflow:${tag} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
 //                             sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
