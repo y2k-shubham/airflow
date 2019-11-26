@@ -2,7 +2,7 @@ pipeline {
     agent { label "production" }
 
     stages {
-        stage("Bundle") {
+        stage("BUILD") {
             steps {
                 withAWS(profile:"JUMBO-ACCOUNT") {
                     script {
@@ -26,28 +26,41 @@ pipeline {
             }
         }
 
-        stage("Version") {
+        stage("ECR PUSH") {
             steps {
                 withAWS(profile:"JUMBO-ACCOUNT") {
                     script {
                         def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
                         def tag = "${branch}_${GIT_COMMIT}"
+                        image_tags = ["${branch}", "${tag}"]
                         sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
-                        sh "docker tag zdp-airflow:${branch} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
-                        sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${tag}"
+                        image_tags.each{ image_tag ->
+                            sh "docker tag zdp-airflow:${branch} \
+                                125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${image_tag}"
+                            sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${image_tag}"
+                        }
                     }
                 }
             }
         }
 
-        stage("Deploy") {
+        stage("ECS UPDATE") {
             steps {
                 withAWS(profile:"JUMBO-ACCOUNT") {
                     script {
                         def branch = env.GIT_BRANCH.replaceAll("(.*)/", "")
-                        sh "\$(aws ecr get-login --no-include-email --region ap-southeast-1)"
-                        sh "docker tag zdp-airflow:${branch} 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
-                        sh "docker push 125719378300.dkr.ecr.ap-southeast-1.amazonaws.com/zdp-airflow:${branch}"
+                        def services = ['apache-webserver','apache-scheduler','apache-flower','apache-worker']
+                        def cluster
+                        if (branch == "zmaster") {
+                            cluster = "zdp-airflow"
+                        } else if (branch == "zstaging") {
+                            cluster = "zdp-staging-airflow"
+                        } else {
+                            cluster = "zdp-dev-airflow"
+                        }
+                        services.each { service ->
+                            sh "aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment"
+                        }
                     }
                 }
             }
