@@ -66,7 +66,7 @@ pipeline {
             }
         }
 
-        stage("Clean") {
+        stage("CLEAN") {
             steps {
                 withAWS(profile:"JUMBO-ACCOUNT") {
                     script {
