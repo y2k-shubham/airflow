@@ -44,7 +44,8 @@ pipeline {
             }
         }
 
-        stage("ECS UPDATE") {
+        // TODO: Update services/task-definitions after each deployment
+        /* stage("ECS UPDATE") {
             steps {
                 withAWS(profile:"JUMBO-ACCOUNT") {
                     script {
@@ -64,7 +65,7 @@ pipeline {
                     }
                 }
             }
-        }
+        } */
 
         stage("CLEAN") {
             steps {
