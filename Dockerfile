@@ -17,7 +17,7 @@
 #
 # Base image for the whole Docker file
 ARG APT_DEPS_IMAGE="airflow-apt-deps-ci-slim"
-ARG PYTHON_BASE_IMAGE="python:3.6-slim-stretch"
+ARG PYTHON_BASE_IMAGE="python:3.7.5-slim-stretch"
 ############################################################################################################
 # This is the slim image with APT dependencies needed by Airflow. It is based on a python slim image
 # Parameters:
@@ -27,7 +27,7 @@ FROM ${PYTHON_BASE_IMAGE} as airflow-apt-deps-ci-slim
 
 SHELL ["/bin/bash", "-o", "pipefail", "-e", "-u", "-x", "-c"]
 
-ARG PYTHON_BASE_IMAGE="python:3.6-slim-stretch"
+ARG PYTHON_BASE_IMAGE="python:3.7.5-slim-stretch"
 ENV PYTHON_BASE_IMAGE=${PYTHON_BASE_IMAGE}
 
 ARG AIRFLOW_VERSION="1.10.5"
