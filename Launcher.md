@@ -65,6 +65,23 @@ Now we will create task definitions for the airflow
 - flower
 - initdb (In case launching a new cluster with diff metastore)
 
+**We will first generate fernet key and same key will be used in all the task definitions** 
+
+To generate fernet key use this python code 
+
+    from cryptography.fernet import Fernet
+    FERNET_KEY = Fernet.generate_key().decode()
+    print(FERNET_KEY)
+
+We will need to update the following variables in the below json to their respective values
+
+    YOUR_COMMAND => webserver/scheduler/flower/worker
+    YOUR_FERNET_KEY => your generated fernet key
+    s3://path/to/logs => path to s3 logs directory
+    YOUR_REDIS_QUEUE => your redis queue
+    YOUR_CONTAINER_NAME => your container name
+    YOUR_TASK_NAME => your task name
+
 We will be using this task_definition json 
 
 	{
