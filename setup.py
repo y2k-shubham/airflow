@@ -260,7 +260,9 @@ zomato_custom = ['statsmodels~=0.9.0',
                  'humanfriendly~=4.18',
                  'pylivy~=0.0.3',
                  'yarn-api-client~=0.3.6',
-                 'sasl~=0.2.1']
+                 'sasl~=0.2.1',
+                 'overrides',
+                 'sqlparser']
 
 all_dbs = postgres + mysql + hive + mssql + hdfs + vertica + cloudant + druid + pinot \
           + cassandra + mongo
