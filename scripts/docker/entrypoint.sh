@@ -23,7 +23,7 @@ set -e
 if test "$AWS_EXECUTION_ENV" = "AWS_ECS_EC2"
 then
   instance_ip=$(curl --silent http://169.254.169.254/1.0/meta-data/local-ipv4)
-  AIRFLOW__SCHEDULER__STATSD_HOST=$instance_ip
+  export AIRFLOW__SCHEDULER__STATSD_HOST=$instance_ip
 fi
 echo statsd host is "$AIRFLOW__SCHEDULER__STATSD_HOST"
 
