@@ -20,6 +20,10 @@ set -e
 
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
 
+instance_ip=$(curl http://169.254.169.254/1.0/meta-data/local-ipv4)
+echo instance ip is "$instance_ip"
+: "${AIRFLOW__SCHEDULER__STATSD_HOST:=$instance_ip}"
+
 echo Starting Apache Airflow with command:
 echo airflow "$@"
 
