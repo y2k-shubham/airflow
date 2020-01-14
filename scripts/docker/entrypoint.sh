@@ -20,9 +20,12 @@ set -e
 
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
 
-instance_ip=$(curl http://169.254.169.254/1.0/meta-data/local-ipv4)
-echo instance ip is "$instance_ip"
-: "${AIRFLOW__SCHEDULER__STATSD_HOST:=$instance_ip}"
+if test "$AWS_EXECUTION_ENV" = "AWS_ECS_EC2"
+then
+  instance_ip=$(curl --silent http://169.254.169.254/1.0/meta-data/local-ipv4)
+  AIRFLOW__SCHEDULER__STATSD_HOST=$instance_ip
+fi
+echo statsd host is "$AIRFLOW__SCHEDULER__STATSD_HOST"
 
 echo Starting Apache Airflow with command:
 echo airflow "$@"
