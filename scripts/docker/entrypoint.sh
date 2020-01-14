@@ -20,10 +20,12 @@ set -e
 
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
 
+export AIRFLOW__SCHEDULER__STATSD_HOST
+
 if test "$AWS_EXECUTION_ENV" = "AWS_ECS_EC2"
 then
   instance_ip=$(curl --silent http://169.254.169.254/1.0/meta-data/local-ipv4)
-  export AIRFLOW__SCHEDULER__STATSD_HOST=$instance_ip
+  AIRFLOW__SCHEDULER__STATSD_HOST=$instance_ip
 fi
 echo statsd host is "$AIRFLOW__SCHEDULER__STATSD_HOST"
 
