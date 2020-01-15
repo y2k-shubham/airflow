@@ -262,7 +262,8 @@ zomato_custom = ['statsmodels~=0.9.0',
                  'yarn-api-client~=0.3.6',
                  'sasl~=0.2.1',
                  'overrides',
-                 'sqlparser']
+                 'sqlparser',
+                 'airflow-prometheus-exporter']
 
 all_dbs = postgres + mysql + hive + mssql + hdfs + vertica + cloudant + druid + pinot \
           + cassandra + mongo
