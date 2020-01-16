@@ -262,7 +262,8 @@ zomato_custom = ['statsmodels~=0.9.0',
                  'yarn-api-client~=0.3.6',
                  'sasl~=0.2.1',
                  'overrides',
-                 'sqlparser']
+                 'sqlparser',
+                 'airflow-prometheus-exporter']
 
 all_dbs = postgres + mysql + hive + mssql + hdfs + vertica + cloudant + druid + pinot \
           + cassandra + mongo
@@ -307,7 +308,7 @@ devel_all = (sendgrid + devel + all_dbs + doc + samba + s3 + slack + crypto + or
              datadog + zendesk + jdbc + ldap + kerberos + password + webhdfs + jenkins +
              druid + pinot + segment + snowflake + elasticsearch + azure_data_lake + azure_cosmos +
              atlas + azure_container_instances + cgroups + virtualenv + flask_oauth + atlas + emr +
-             async_packages + zomato_custom)
+             async_packages + zomato_custom + statsd)
 
 # Snakebite & Google Cloud Dataflow are not Python 3 compatible :'(
 if PY3:
