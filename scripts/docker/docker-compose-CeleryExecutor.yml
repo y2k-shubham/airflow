@@ -31,7 +31,6 @@ services:
         volumes:
             - ./dags:/home/airflow/airflow/dags
             # Uncomment to include custom plugins
-            # - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
         command: webserver -w 16
