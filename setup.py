@@ -344,7 +344,7 @@ def do_setup():
             'dumb-init>=1.2.2',
             'enum34~=1.1.6;python_version<"3.4"',
             'flask>=1.1.0, <2.0',
-            'flask-appbuilder>=1.12.5, <2.0.0',
+            'flask-appbuilder~=2.2',
             'flask-admin==1.5.3',
             'flask-caching>=1.3.3, <1.4.0',
             'flask-login>=0.3, <0.5',
