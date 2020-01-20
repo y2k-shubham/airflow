@@ -66,7 +66,7 @@ SECRET_KEY = conf.get('google', 'CLIENT_SECRET')
 # Google OAuth example:
 OAUTH_PROVIDERS = [{
     'name': 'google',
-    'whitelist': ["zomans.com,zomato.com"],  # optional
+    'whitelist': ["zomans.com", "zomato.com"],  # optional
     'token_key': 'access_token',
     'icon': 'fa-google',
     'remote_app': {
