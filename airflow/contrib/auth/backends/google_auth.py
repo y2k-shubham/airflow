@@ -103,14 +103,13 @@ class GoogleAuthBackend(object):
             authorize_url='https://accounts.google.com/o/oauth2/auth')
 
         self.login_manager.user_loader(self.load_user)
-        log.error(f"google_oauth_callback -> {get_config_param('oauth_callback_route')}")
+
         self.flask_app.add_url_rule(get_config_param('oauth_callback_route'),
                                     'google_oauth_callback',
                                     self.oauth_callback)
 
     def login(self, request):
-        log.error('Redirecting user to Google login')
-        log.error(f"google_oauth_callback callback {url_for('google_oauth_callback', _external=True)}")
+        log.debug('Redirecting user to Google login')
         return self.google_oauth.authorize(callback=url_for(
             'google_oauth_callback',
             _external=True),
