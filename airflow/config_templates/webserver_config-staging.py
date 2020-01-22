@@ -16,16 +16,15 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-"""Default configuration for the Airflow webserver"""
+
 import os
-from flask_appbuilder.security.manager import AUTH_DB
+from airflow import configuration as conf
+# from flask_appbuilder.security.manager import AUTH_DB
 # from flask_appbuilder.security.manager import AUTH_LDAP
-# from flask_appbuilder.security.manager import AUTH_OAUTH
+from flask_appbuilder.security.manager import AUTH_OAUTH
+
 # from flask_appbuilder.security.manager import AUTH_OID
 # from flask_appbuilder.security.manager import AUTH_REMOTE_USER
-
-from airflow import configuration as conf
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # The SQLAlchemy connection string.
@@ -47,39 +46,41 @@ CSRF_ENABLED = True
 # AUTH_LDAP : Is for LDAP
 # AUTH_REMOTE_USER : Is for using REMOTE_USER from web server
 # AUTH_OAUTH : Is for OAuth
-AUTH_TYPE = AUTH_DB
+AUTH_TYPE = AUTH_OAUTH
 
 # Uncomment to setup Full admin role name
-# AUTH_ROLE_ADMIN = 'Admin'
+AUTH_ROLE_ADMIN = 'Admin'
 
 # Uncomment to setup Public role name, no authentication needed
-# AUTH_ROLE_PUBLIC = 'Public'
+AUTH_ROLE_PUBLIC = 'Public'
 
 # Will allow user self registration
-# AUTH_USER_REGISTRATION = True
+AUTH_USER_REGISTRATION = True
 
 # The default user self registration role
-# AUTH_USER_REGISTRATION_ROLE = "Public"
+AUTH_USER_REGISTRATION_ROLE = "Public"
 
+CONSUMER_KEY = conf.get('google', 'CLIENT_ID')
+SECRET_KEY = conf.get('google', 'CLIENT_SECRET')
 # When using OAuth Auth, uncomment to setup provider(s) info
 # Google OAuth example:
-# OAUTH_PROVIDERS = [{
-#   'name':'google',
-#     'whitelist': ['@YOU_COMPANY_DOMAIN'],  # optional
-#     'token_key':'access_token',
-#     'icon':'fa-google',
-#         'remote_app': {
-#             'base_url':'https://www.googleapis.com/oauth2/v2/',
-#             'request_token_params':{
-#                 'scope': 'email profile'
-#             },
-#             'access_token_url':'https://accounts.google.com/o/oauth2/token',
-#             'authorize_url':'https://accounts.google.com/o/oauth2/auth',
-#             'request_token_url': None,
-#             'consumer_key': CONSUMER_KEY,
-#             'consumer_secret': SECRET_KEY,
-#         }
-# }]
+OAUTH_PROVIDERS = [{
+    'name': 'google',
+    'whitelist': ["zomans.com", "zomato.com"],  # optional
+    'token_key': 'access_token',
+    'icon': 'fa-google',
+    'remote_app': {
+        'base_url': 'https://www.googleapis.com/oauth2/v2/',
+        'request_token_params': {
+            'scope': 'email profile'
+        },
+        'access_token_url': 'https://accounts.google.com/o/oauth2/token',
+        'authorize_url': 'https://accounts.google.com/o/oauth2/auth',
+        'request_token_url': None,
+        'consumer_key': CONSUMER_KEY,
+        'consumer_secret': SECRET_KEY,
+    }
+}]
 
 # When using LDAP Auth, setup the ldap server
 # AUTH_LDAP_SERVER = "ldap://ldapserver.new"
@@ -101,21 +102,3 @@ AUTH_TYPE = AUTH_DB
 # Please make sure to remove "navbar_color" configuration from airflow.cfg
 # in order to fully utilize the theme. (or use that property in conjunction with theme)
 # APP_THEME = "bootstrap-theme.css"  # default bootstrap
-# APP_THEME = "amelia.css"
-# APP_THEME = "cerulean.css"
-# APP_THEME = "cosmo.css"
-# APP_THEME = "cyborg.css"
-# APP_THEME = "darkly.css"
-# APP_THEME = "flatly.css"
-# APP_THEME = "journal.css"
-# APP_THEME = "lumen.css"
-# APP_THEME = "paper.css"
-# APP_THEME = "readable.css"
-# APP_THEME = "sandstone.css"
-# APP_THEME = "simplex.css"
-# APP_THEME = "slate.css"
-# APP_THEME = "solar.css"
-# APP_THEME = "spacelab.css"
-# APP_THEME = "superhero.css"
-# APP_THEME = "united.css"
-# APP_THEME = "yeti.css"
