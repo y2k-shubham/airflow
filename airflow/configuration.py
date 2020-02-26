@@ -49,7 +49,7 @@ log = LoggingMixin().log
 warnings.filterwarnings(
     action='default', category=DeprecationWarning, module='airflow')
 warnings.filterwarnings(
-    action='default', category=PendingDeprecationWarning, module='airflow')
+    action='ignore', category=PendingDeprecationWarning, module='airflow')
 
 
 def generate_fernet_key():
