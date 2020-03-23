@@ -13,15 +13,15 @@ pipeline {
                         if (branch == "zmaster") {
                             webserver_config = 'webserver_config-prod.py'
                             airflow_cfg = 'airflow-prod.cfg'
-                            airflow_prometheus_exporter = 'git+https://github.com/ayush-san/airflow-prometheus-exporter.git@master'
+                            airflow_prometheus_exporter = 'git+https://github.com/Zomato/airflow-prometheus-exporter.git@v1.0.8'
                         } else if (branch == "zstaging") {
                             webserver_config = 'webserver_config-staging.py'
                             airflow_cfg = 'airflow-staging.cfg'
-                            airflow_prometheus_exporter = 'git+https://github.com/ayush-san/airflow-prometheus-exporter.git@master'
+                            airflow_prometheus_exporter = 'git+https://github.com/Zomato/airflow-prometheus-exporter.git@v1.0.8'
                         } else {
                             webserver_config = 'webserver_config-dev.py'
                             airflow_cfg = 'airflow-dev.cfg'
-                            airflow_prometheus_exporter = 'git+https://github.com/ayush-san/airflow-prometheus-exporter.git@master'
+                            airflow_prometheus_exporter = 'git+https://github.com/Zomato/airflow-prometheus-exporter.git@v1.0.8'
                         }
                         sh "docker build -t zdp-airflow:${branch} --build-arg WEBSERVER_CONFIG=${webserver_config} " +
                                 "--build-arg AIRFLOW_CFG=${airflow_cfg} --build-arg " +
