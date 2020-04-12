@@ -265,7 +265,7 @@ zomato_custom = ['statsmodels~=0.9.0',
                  'sqlparser',
                  'werkzeug==0.16.1',
                  'jsonnet'
-                 'tabulate']
+                 'numpy']
 
 all_dbs = postgres + mysql + hive + mssql + hdfs + vertica + cloudant + druid + pinot \
           + cassandra + mongo
